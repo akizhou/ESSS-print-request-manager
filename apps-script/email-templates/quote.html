@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      #quote {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      #quote td, th {
+          padding: 8px;
+          border: 1px solid black;
+          background-color: #f2f2f2;
+      }
+      #quote th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: center;
+        background-color: rgb(0,103,172);
+        color: white;
+      }
+    </style>
+  </head>
+  <body style="background-color: rgb(218, 218, 218);">
+    <div style="height: 20px; background-color: rgb(218, 218, 218);"></div>    <!-- Gmail chops off margin until actual content so this is needed to forcefully add a margin -->
+    <table width=80% style="margin-left: 10%; background-color:white; border-radius: 10px;">
+      <tr>
+        <td align="center">
+          <img src="https://drive.google.com/uc?export=view&id=1zP4Vvy_XzXuWWAq-JwuXO_rnHh9sEaFw" alt = "ESSS Logo" style="width:80vw; max-width: 800px;">
+        </td>
+      </tr>
+      <tr>
+        <td align="left">
+          <div style="padding-left: 5vw; padding-right: 5vw; padding-bottom: 5vw;">
+            <br>
+              <p>Hi <?=name?>,</p><br>
+              <p>
+                We have sliced your model for printing and here is your quote.<br><br>
+                <table id="quote">
+                  <tr>
+                    <th>Estimated Print Time (hh:mm)</th>
+                    <th>Estimated Material Usage (g)</th>
+                    <th>Price</th>
+                  </tr>
+                  <tr>
+                    <td><?=printTime?></td>
+                    <td><?=materialUsage?></td>
+                    <td><strong>$ <?=price?></strong></td>
+                  </tr>
+                </table><br><br>
+                <strong>Action required</strong><br>
+                If you would like to confirm your request, please e-transer the quoted price to resource@esss.ca.<br>
+                Please make the password <strong>printesss</strong> if required.<br><br>
+                Once we verify your payment we will start printing as soon as possible.<br>
+                Your request will be cancelled automatically if we do not receive payment after 2 weeks since this email is sent out.<br>
+                So, please resubmit a request if you miss the payment<br><br>
+                The print may take much longer than the estimated print time on the quote.<br>
+                This is because we will only send out pickup email once we verify print completion in person and, 
+                sometimes we have to restart prints due to unexpected behavior of the printer.<br><br>
+                Thank you in advance for your patience and understanding.
+              </p><br>
+              <p>Best,</p>
+              <p style="color: rgb(61, 133, 198); font-weight: bold;"><?=directorName?></p>
+              <p>
+                  Director of Engineering Resource Center | Engineering Science Student Society<br>
+                  <small>T. <?=directorPhone?> | resource@esss.ca</small>
+              </p><br>
+              <small>
+                  Simon Fraser University | Applied Science Building 10826<br>
+                  8888 University Drive Burnaby BC V5A1S6
+              </small><br>
+              <small style="color: gray; font-style: italic;">
+                  I respectfully acknowledge SFU is on unceded Coast Salish territory; the traditional 
+                  territories of the Musqueam, Squamish, and Tsleil-Waututh Nations.
+              </small>
+          </div>
+        </td>
+      </tr>
+    </table>
+    <div style="height: 20px; background-color: rgb(218, 218, 218);"></div>    <!-- Gmail chops off margin until actual content so this is needed to forcefully add a margin -->
+  </body>
+</html>

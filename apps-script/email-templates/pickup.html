@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body style="background-color: rgb(218, 218, 218);">
+    <div style="height: 20px; background-color: rgb(218, 218, 218);"></div>    <!-- Gmail chops off margin until actual content so this is needed to forcefully add a margin -->
+    <table width=80% style="margin-left: 10%; background-color:white; border-radius: 10px;">
+      <tr>
+        <td align="center">
+          <img src="https://drive.google.com/uc?export=view&id=1zP4Vvy_XzXuWWAq-JwuXO_rnHh9sEaFw" alt = "ESSS Logo" style="width:80vw; max-width: 800px;">
+        </td>
+      </tr>
+      <tr>
+        <td align="left">
+          <div style="padding-left: 5vw; padding-right: 5vw; padding-bottom: 5vw;">
+            <br>
+              <p>Hi <?=name?>,</p><br>
+              <p>
+                Your request has been printed and is ready to be picked up from the safe located in the engineering common room.<br><br>
+                <strong>Action required</strong><br>
+                Please pick up your print as soon as possible. We cannot compensate for any item loss due to broken safe.<br><br>
+                When there are other requests waiting to use the safe, your prints may be replaced 5 business days after this email"
+                is sent out and the pin will be changed.<br>If that's the case, please reply to this email for a pickup reschedule.<br><br>
+                The pin to unlock the safe is <strong><?=pin?></strong> <br><br>
+                Thank you for using the ESSS 3D Printing Service. We hope to see you again soon!!
+              </p><br>
+              <p>Best,</p>
+              <p style="color: rgb(61, 133, 198); font-weight: bold;"><?=directorName?></p>
+              <p>
+                  Director of Engineering Resource Center | Engineering Science Student Society<br>
+                  <small>T. <?=directorPhone?> | resource@esss.ca</small>
+              </p><br>
+              <small>
+                  Simon Fraser University | Applied Science Building 10826<br>
+                  8888 University Drive Burnaby BC V5A1S6
+              </small><br>
+              <small style="color: gray; font-style: italic;">
+                  I respectfully acknowledge SFU is on unceded Coast Salish territory; the traditional 
+                  territories of the Musqueam, Squamish, and Tsleil-Waututh Nations.
+              </small>
+          </div>
+        </td>
+      </tr>
+    </table>
+    <div style="height: 20px; background-color: rgb(218, 218, 218);"></div>    <!-- Gmail chops off margin until actual content so this is needed to forcefully add a margin -->
+  </body>
+</html>
