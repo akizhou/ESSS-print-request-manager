@@ -14,6 +14,20 @@
 
 
 class EmailResponder {
+  id: string;
+  name: string;
+  email: string;
+  academic: string;
+  color: string;
+  printTime: string;
+  materialUsage: string;
+  price: string;
+  safeAccess: string;
+  receipt: string;
+  readonly DIRECTOR_NAME: string;
+  readonly DIRECTOR_PHONE: string;
+  message: string;
+  
   constructor(info) {
     this.id = info[QUEUE_COLS.id - 1];
     this.name = info[QUEUE_COLS.name - 1];
@@ -32,13 +46,15 @@ class EmailResponder {
   }
 
   notifyServiceInactive() {
-    let subject = "Service inactive";
+    Logger.log("Notifying service inactive");
 
-    let emailTemp = HtmlService.createTemplateFromFile("serviceInactive");
+    let subject: string = "Service inactive";
+
+    let emailTemp: HtmlTemplate = HtmlService.createTemplateFromFile("email-templates/serviceInactive");
     emailTemp.name = this.name;
     emailTemp.directorName = this.DIRECTOR_NAME;
     emailTemp.directorPhone = this.DIRECTOR_PHONE;
-    let htmlMessage = emailTemp.evaluate().getContent();
+    let htmlMessage: string = emailTemp.evaluate().getContent();
 
     GmailApp.sendEmail(this.email, subject, this.message, {
       htmlBody: htmlMessage,
@@ -47,14 +63,16 @@ class EmailResponder {
   }
 
   confirmReception() {
-    let subject = `Print request received (ID: ${ this.id })`;
+    Logger.log("Confirming request reception");
 
-    let emailTemp = HtmlService.createTemplateFromFile("received");
+    let subject: string = `Print request received (ID: ${ this.id })`;
+
+    let emailTemp: HtmlTemplate = HtmlService.createTemplateFromFile("email-templates/received");
     emailTemp.name = this.name;
     emailTemp.id = this.id;
     emailTemp.directorName = this.DIRECTOR_NAME;
     emailTemp.directorPhone = this.DIRECTOR_PHONE;
-    let htmlMessage = emailTemp.evaluate().getContent();
+    let htmlMessage: string = emailTemp.evaluate().getContent();
     
     GmailApp.sendEmail(this.email, subject, this.message, {
       htmlBody: htmlMessage,
@@ -63,9 +81,11 @@ class EmailResponder {
   }
 
   confirmCancellation(cancellationStatus) {
-    let subject = `Request couldn't be cancelled (ID: ${ this.id })`;
+    Logger.log("Notifying cancellation status");
 
-    let emailTemp = HtmlService.createTemplateFromFile("cancel");
+    let subject: string = `Request couldn't be cancelled (ID: ${ this.id })`;
+
+    let emailTemp: HtmlTemplate = HtmlService.createTemplateFromFile("email-templates/cancel");
     emailTemp.name = this.name;
     if (cancellationStatus > 1) {
       // Successfully cancelled
@@ -82,7 +102,7 @@ class EmailResponder {
     }
     emailTemp.directorName = this.DIRECTOR_NAME;
     emailTemp.directorPhone = this.DIRECTOR_PHONE;
-    let htmlMessage = emailTemp.evaluate().getContent();
+    let htmlMessage: string = emailTemp.evaluate().getContent();
     
     GmailApp.sendEmail(this.email, subject, this.message, {
       htmlBody: htmlMessage,
@@ -91,16 +111,18 @@ class EmailResponder {
   }
 
   sendQuote() {
-    let subject = `Here is your quote (ID: ${ this.id })`;
+    Logger.log("Sending request quote");
 
-    let emailTemp = HtmlService.createTemplateFromFile("quote");
+    let subject: string = `Here is your quote (ID: ${ this.id })`;
+
+    let emailTemp: HtmlTemplate = HtmlService.createTemplateFromFile("email-templates/quote");
     emailTemp.name = this.name;
     emailTemp.printTime = this.printTime;
     emailTemp.materialUsage = this.materialUsage;
     emailTemp.price = this.price;
     emailTemp.directorName = this.DIRECTOR_NAME;
     emailTemp.directorPhone = this.DIRECTOR_PHONE;
-    let htmlMessage = emailTemp.evaluate().getContent();
+    let htmlMessage: string = emailTemp.evaluate().getContent();
     
     GmailApp.sendEmail(this.email, subject, this.message, {
       htmlBody: htmlMessage,
@@ -109,15 +131,17 @@ class EmailResponder {
   }
 
   notifyPrintStarted() {
-    let subject = `We started to print your request!! (ID: ${ this.id })`;
+    Logger.log("Notifying print started");
+
+    let subject: string = `We started to print your request!! (ID: ${ this.id })`;
 
     if (this.receipt == "Yes") {
-      let emailTemp = HtmlService.createTemplateFromFile("printStarted");
+      let emailTemp: HtmlTemplate = HtmlService.createTemplateFromFile("email-templates/printStarted");
       emailTemp.name = this.name;
       emailTemp.directorName = this.DIRECTOR_NAME;
       emailTemp.directorPhone = this.DIRECTOR_PHONE;
-      let htmlMessage = emailTemp.evaluate().getContent();
-      let requestReceipt = this.generateReceipt();
+      let htmlMessage: string = emailTemp.evaluate().getContent();
+      let requestReceipt: Blob = this.generateReceipt();
 
       GmailApp.sendEmail(this.email, subject, this.message, {
       htmlBody: htmlMessage,
@@ -126,11 +150,11 @@ class EmailResponder {
       });
     }
     else {
-      let emailTemp = HtmlService.createTemplateFromFile("printStarted_noReceipt");
+      let emailTemp: HtmlTemplate = HtmlService.createTemplateFromFile("email-templates/printStarted_noReceipt");
       emailTemp.name = this.name;
       emailTemp.directorName = this.DIRECTOR_NAME;
       emailTemp.directorPhone = this.DIRECTOR_PHONE;
-      let htmlMessage = emailTemp.evaluate().getContent();
+      let htmlMessage: string = emailTemp.evaluate().getContent();
 
       GmailApp.sendEmail(this.email, subject, this.message, {
       htmlBody: htmlMessage,
@@ -140,16 +164,18 @@ class EmailResponder {
   }
 
   notifyPickUpReady() {
-    let subject = `Your print is ready for pickup!! (ID: ${ this.id })`;
+    Logger.log("Notifying pickup");
+
+    let subject: string = `Your print is ready for pickup!! (ID: ${ this.id })`;
 
     if (this.safeAccess == "Yes") {
-      let emailTemp = HtmlService.createTemplateFromFile("pickup");
+      let emailTemp: HtmlTemplate = HtmlService.createTemplateFromFile("email-templates/pickup");
       emailTemp.name = this.name;
-      let newPin = this.generatePin();
+      let newPin: string = this.generatePin();
       emailTemp.pin = newPin;
       emailTemp.directorName = this.DIRECTOR_NAME;
       emailTemp.directorPhone = this.DIRECTOR_PHONE;
-      let htmlMessage = emailTemp.evaluate().getContent();
+      let htmlMessage: string = emailTemp.evaluate().getContent();
 
       GmailApp.sendEmail(this.email, subject, this.message, {
         htmlBody: htmlMessage,
@@ -159,11 +185,11 @@ class EmailResponder {
       return newPin;
     }
     else {
-      let emailTemp = HtmlService.createTemplateFromFile("arrangePickup");
+      let emailTemp: HtmlTemplate = HtmlService.createTemplateFromFile("email-templates/arrangePickup");
       emailTemp.name = this.name;
       emailTemp.directorName = this.DIRECTOR_NAME;
       emailTemp.directorPhone = this.DIRECTOR_PHONE;
-      let htmlMessage = emailTemp.evaluate().getContent();
+      let htmlMessage: string = emailTemp.evaluate().getContent();
 
       GmailApp.sendEmail(this.email, subject, this.message, {
         htmlBody: htmlMessage,
@@ -175,11 +201,14 @@ class EmailResponder {
     
   }
 
+  /**
+   * Generates a new pin of random length between 4 to 8 digits that has never been issued.
+   */
   generatePin() {
     // Get pins that have been issued
-    let pins = new Set();
-    let pastPins = archiveSheet.getRange("N2:N").getValues().map(x=>x[0]);
-    let currentPins = queueSheet.getRange("N2:N").getValues().map(x=>x[0]);
+    let pins: Set = new Set();
+    let pastPins: Array<string> = archiveSheet.getRange("N2:N").getValues().map(x=>x[0]);
+    let currentPins: Array<string> = queueSheet.getRange("N2:N").getValues().map(x=>x[0]);
     for (let i = 0; i < pastPins.length; i++) {
       if (pastPins[i] == "") {
         break;
@@ -194,60 +223,64 @@ class EmailResponder {
     }
 
     // Generate a pin that hasn't been issued ever
-    const MIN_PINLENGTH = 4;
-    const MAX_PINLENGTH = 8;
-    let newPin = undefined;
+    const MIN_PINLENGTH: bigint = 4;
+    const MAX_PINLENGTH: bigint = 8;
+    let newPin: string = undefined;
+
+    Logger.log("Generating a new pin");
+
     do {
       // Get a random length
-      let pinLength = Math.random() * (MAX_PINLENGTH - MIN_PINLENGTH) + MIN_PINLENGTH;
+      let pinLength: bigint = Math.random() * (MAX_PINLENGTH - MIN_PINLENGTH) + MIN_PINLENGTH;
       // Generate a random number according to pinLength
       newPin = Math.random().toString().slice(2, 3 + pinLength);
     }
     while (pins.has(newPin))
 
+    Logger.log("Pin generated");
+
     return newPin;
   }
 
+  /**
+   * Generates a receipt from template and returns as a pdf.
+   */
   generateReceipt() {
-    const RECEIPT_TEMPLATE_ID = "1tGHNmwnDmMDuyayAJeUhPA9iOoRzMTSqP3fAKaaMS1I";
-    const RECEIPT_FOLDER_ID = "1hBP0ahflX8xWtvsrUmHLDEQY9ih7zjRN";
+    Logger.log("Generating a receipt");
 
-    let receiptName = `Receipt (${ this.id })`;
-    let destination = DriveApp.getFolderById(RECEIPT_FOLDER_ID);
+    const RECEIPT_TEMPLATE_ID: string = "1tGHNmwnDmMDuyayAJeUhPA9iOoRzMTSqP3fAKaaMS1I";
+    const RECEIPT_FOLDER_ID: string = "1hBP0ahflX8xWtvsrUmHLDEQY9ih7zjRN";
+
+    let receiptName: string = `Receipt (${ this.id })`;
+    let destination: Folder = DriveApp.getFolderById(RECEIPT_FOLDER_ID);
 
     // Make a copy of the template in Drive and save to Issued Receipts folder  
-    let receiptDocFile = DriveApp.getFileById(RECEIPT_TEMPLATE_ID).makeCopy(receiptName, destination);
+    let receiptDocFile: File = DriveApp.getFileById(RECEIPT_TEMPLATE_ID).makeCopy(receiptName, destination);
 
     // Change the contents of the doc
-    let receiptDoc = DocumentApp.openById(receiptDocFile.getId());
-    let textBody = receiptDoc.getBody();
+    let receiptDoc: Document = DocumentApp.openById(receiptDocFile.getId());
+    let textBody: Body = receiptDoc.getBody();
 
-    let today = new Date();
-    let dd = String(today.getDate()).padStart(2, '0');
-    let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    let yyyy = today.getFullYear();
-    today = mm + '/' + dd + '/' + yyyy;
+    let today: Date = new Date();
+    let dd: string = String(today.getDate()).padStart(2, '0');
+    let mm: string = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    let yyyy: string = today.getFullYear();
+    let day: string = mm + '/' + dd + '/' + yyyy;
 
-    let color = (this.color == "Don't care") ? "Random color" : this.color;
-    let description = `${ color } PLA ${ this.materialUsage } grams, ${ this.printTime } print`;
+    let color: string = (this.color == "Don't care") ? "Random color" : this.color;
+    let description: string = `${ color } PLA ${ this.materialUsage } grams, ${ this.printTime } print`;
 
-    textBody.replaceText("!date issued!", today)
-        .replaceText("!id!", this.id)
-        .replaceText("!client name!", this.name)
-        .replaceText("!price!", this.price.toFixed(2))
-        .replaceText("!description!", description);
+    textBody.replaceText("!date issued!", day);
+    textBody.replaceText("!id!", this.id);
+    textBody.replaceText("!client name!", this.name);
+    textBody.replaceText("!price!", this.price.toFixed(2));
+    textBody.replaceText("!description!", description);
 
     // Apply changes
     receiptDoc.saveAndClose();
 
-    return receiptDocFile.getAs("application/pdf");
-  }
+    Logger.log("Receipt generated");
 
-  sleep(milliseconds) {
-    const date = Date.now();
-    let currentDate = null;
-    do {
-      currentDate = Date.now();
-    } while (currentDate - date < milliseconds);
+    return receiptDocFile.getAs("application/pdf");
   }
 }
