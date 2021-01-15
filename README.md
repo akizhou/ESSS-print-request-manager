@@ -62,8 +62,6 @@ As described above, the apps script controls almost everything and the clients u
 
 I know you are tired of my writing at this point so here is a [video demo](https://youtu.be/9PWlg3tmtk4).
 
-<iframe width=100% height=500 src="https://www.youtube.com/embed/9PWlg3tmtk4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
 #### Operator Workflow
 ![Operator Workflow](./files/Operator-Workflow.png)
 
