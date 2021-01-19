@@ -92,7 +92,14 @@ function onEditRequest(e) {
   if (columnOfCellEdited == QUEUE_COLS.status) {
     Logger.log("Status of request updated");
 
+    // In any status other than "received" or "cancelled", print time, material usage and price must be filled in
     let status: string = queueSheet.getRange(rowOfCellEdited, columnOfCellEdited).getValue();
+    let cellData: Array<string> = queueSheet.getRange(rowOfCellEdited, QUEUE_COLS.printTime, 1, 3).getValues()[0];
+    if (cellData.indexOf("") > -1 && status != "received" && status != "cancelled") {
+      SpreadsheetApp.getUi().alert("Time, material usage, and price columns must not be empty.\nFill in the missing data and retry changing status");
+      return
+    }
+
     let requestInfo: Array<string> = queueSheet.getRange(`A${ rowOfCellEdited }:O${ rowOfCellEdited }`).getValues()[0];
     requestInfo[QUEUE_COLS.printTime - 1] = queueSheet.getRange(rowOfCellEdited, QUEUE_COLS.printTime).getDisplayValue();    
     let respond: EmailResponder = new EmailResponder(requestInfo);
